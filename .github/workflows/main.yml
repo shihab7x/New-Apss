@@ -13,9 +13,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build with Gradle
+      - name: Install Gradle
+        run: sudo apt-get install gradle -y
+
+      - name: Create Gradle Properties
         run: |
-          gradle assembleDebug
+          printf "org.gradle.jvmargs=-Xmx2048m\nandroid.useAndroidX=true\nandroid.enableJetifier=true" > gradle.properties
+
+      - name: Build with Gradle
+        run: gradle assembleDebug --stacktrace
 
       - name: Upload APK
         uses: actions/upload-artifact@v3
